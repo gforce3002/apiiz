@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Articulo;
 
-class ArticuloContoller extends Controller
+class ArticuloController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,8 @@ class ArticuloContoller extends Controller
      */
     public function index()
     {
-        //
+        return Articulo::all();
+
     }
 
     /**
@@ -34,7 +36,13 @@ class ArticuloContoller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $articulo  = new Articulo;
+        $articulo->descripcion = $request->descripcion;
+        $articulo->precio = $request->precio;
+        $articulo->stock = $request->stock;
+        $articulo->save();
+        $jsonData = array("mensaje"=>"El articulo se registro satisfactoriamente");
+        return json_encode($jsonData);
     }
 
     /**
@@ -66,9 +74,14 @@ class ArticuloContoller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $articulo = Articulo::findOrFail($request->id);
+        $articulo->descripcion = $request->descripcion;
+        $articulo->precio = $request->precio;
+        $articulo->stock = $request->stock;
+        $articulo->save();
+        return $articulo;
     }
 
     /**
@@ -77,8 +90,8 @@ class ArticuloContoller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        return Articulo::destroy($request->id);
     }
 }
